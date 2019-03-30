@@ -1,0 +1,13 @@
+{
+  "id": "engine",
+  "type": "application",
+  "value": {
+    "author": "Sandro Huber",
+    "description": "Engine",
+    "language": "cpp",
+    "use": ["vulkan"]
+  },
+  "lang.cpp": {
+    "cpp-standard": "c++17"
+  }
+}
