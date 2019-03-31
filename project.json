@@ -8,6 +8,9 @@
     "use": ["vulkan"]
   },
   "lang.cpp": {
-    "cpp-standard": "c++17"
+    "cpp-standard": "c++17",
+    "include": [
+      "/home/sandro/dev/engine/include"
+    ]
   }
 }
