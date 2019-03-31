@@ -12,8 +12,6 @@ void Viewer::launch(int width, int height) {
 
   window = glfwCreateWindow(width, height, "Engine", nullptr, nullptr);
   glfwSetKeyCallback(window, exitCallback);
-
-  vulkan = Vulkan();
   vulkan.createInstance();
 
   while (!glfwWindowShouldClose(window)) {
