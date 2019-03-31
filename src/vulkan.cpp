@@ -47,7 +47,6 @@ void Vulkan::createInstance() {
     throw runtime_error("Could not create instance.");
   }
 
-  // debug messenger
   if (VALIDATION_LAYERS_ARE_ENABLED) {
     VkDebugUtilsMessengerCreateInfoEXT createDebugUtilsMessengerInfo{
       .sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
@@ -91,16 +90,6 @@ bool Vulkan::allRequestedValidationLayersAreSupported() {
     }
   );
 }
-
-/*VKAPI_ATTR VkBool32 VKAPI_CALL Vulkan::debugCallback(
-  VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-  VkDebugUtilsMessageTypeFlagsEXT messageType,
-  const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-  void* pUserData) {
-    cerr << "Validation layer: " << pCallbackData->pMessage << endl;
-    return VK_FALSE;
-  }
-*/
 
 VkResult Vulkan::CreateDebugUtilsMessengerEXT(
   VkInstance instance,
