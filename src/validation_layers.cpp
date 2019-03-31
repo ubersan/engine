@@ -37,8 +37,17 @@ void ValidationLayers::setupDebugMessenger(const VkInstance& instance) {
   }
 }
 
-uint32_t ValidationLayers::count() {
-  return static_cast<uint32_t>(layerNames.size());
+void ValidationLayers::addLayers(VkInstanceCreateInfo& instance_create_info) {
+  if (VALIDATION_LAYERS_ARE_ENABLED) {
+    instance_create_info.enabledLayerCount = static_cast<uint32_t>(layerNames.size());
+    instance_create_info.ppEnabledLayerNames = layerNames.data();
+  }
+}
+
+void ValidationLayers::addExtensions(vector<const char*>& extensions) {
+  if (VALIDATION_LAYERS_ARE_ENABLED) {
+    extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+  }
 }
 
 bool ValidationLayers::allRequestedValidationLayersAreSupported() {

@@ -2,13 +2,11 @@
 #include <algorithm>
 
 Vulkan::~Vulkan() {
-  if (VALIDATION_LAYERS_ARE_ENABLED) {
-    validationLayers.cleanUp(instance);
-  }
+  validationLayers.cleanUp(instance);
   vkDestroyInstance(instance, nullptr);
 }
 
-void Vulkan::createInstance() {
+void Vulkan::createInstance(const vector<const char*>& glfwRequiredExtensions) {
   validationLayers.request({"VK_LAYER_LUNARG_standard_validation"});
 
   VkApplicationInfo application_info = {
@@ -20,13 +18,8 @@ void Vulkan::createInstance() {
     .apiVersion = VK_API_VERSION_1_1,
   };
 
-  uint32_t glfwRequiredInstanceExtensionsCount = 0;
-  auto glfwRequiredInstanceExtensions = glfwGetRequiredInstanceExtensions(&glfwRequiredInstanceExtensionsCount);
-
-  vector<const char*> extensions(glfwRequiredInstanceExtensions, glfwRequiredInstanceExtensions + glfwRequiredInstanceExtensionsCount);
-  if (VALIDATION_LAYERS_ARE_ENABLED) {
-    extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-  }
+  vector<const char*> extensions{glfwRequiredExtensions};
+  validationLayers.addExtensions(extensions);
 
   VkInstanceCreateInfo instance_create_info = {
     .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
@@ -35,10 +28,7 @@ void Vulkan::createInstance() {
     .ppEnabledExtensionNames = extensions.data(),
   };
 
-  if (VALIDATION_LAYERS_ARE_ENABLED) {
-    instance_create_info.enabledLayerCount = validationLayers.count();
-    instance_create_info.ppEnabledLayerNames = validationLayers.layerNames.data();
-  }
+  validationLayers.addLayers(instance_create_info);
 
   if (vkCreateInstance(&instance_create_info, nullptr, &instance) != VK_SUCCESS) {
     throw runtime_error("Could not create instance.");

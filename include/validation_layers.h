@@ -16,13 +16,15 @@ class ValidationLayers {
 public:
   void request(const vector<const char*>& requestedValidationLayerNames);
   void setupDebugMessenger(const VkInstance& instance);
-  uint32_t count();
   void cleanUp(const VkInstance& instance);
 
-  vector<const char*> layerNames;
+  void addLayers(VkInstanceCreateInfo& instance_create_info);
+  void addExtensions(vector<const char*>& extensions);
 
 private:
   VkDebugUtilsMessengerEXT debugMessenger;
+
+  vector<const char*> layerNames;
 
   bool allRequestedValidationLayersAreSupported();
 
