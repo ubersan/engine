@@ -1,4 +1,5 @@
 #include "validation_layers.h"
+#include "physical_devices.h"
 
 class Vulkan {
 public:
@@ -11,4 +12,5 @@ private:
   VkInstance instance;
   VkPhysicalDevice physicalDevice{VK_NULL_HANDLE};
   ValidationLayers validationLayers;
+  PhysicalDevices physicalDevices;
 };

@@ -38,13 +38,5 @@ void Vulkan::createInstance(const vector<const char*>& glfwRequiredExtensions) {
 }
 
 void Vulkan::pickPhysicalDevice() {
-  uint32_t deviceCount = 0;
-  vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
-
-  if (deviceCount == 0) {
-    throw runtime_error("No GPUs with Vulkan support found");
-  }
-
-  vector<VkPhysicalDevice> physicalDevices(deviceCount);
-  vkEnumeratePhysicalDevices(instance, &deviceCount, physicalDevices.data());
+  physicalDevice = physicalDevices.findMostSuitableDevice(instance);
 }
