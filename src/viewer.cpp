@@ -16,6 +16,7 @@ void Viewer::launch(int width, int height) {
   auto requiredExtensions = getRequiredExtensions();
   vulkan.createInstance(requiredExtensions);
   vulkan.pickPhysicalDevice();
+  vulkan.createLogicalDevice();
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
