@@ -20,18 +20,23 @@ VkPhysicalDevice PhysicalDevices::findMostSuitableDevice(const VkInstance& insta
   throw runtime_error("Failed to find a suitable GPU");
 }
 
-bool PhysicalDevices::isDeviceSuitable(const VkPhysicalDevice& device) {
+uint32_t PhysicalDevices::getQueueFamilyIndex(const VkPhysicalDevice& device) {
   uint32_t queueFamilyCount = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
   vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
   vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
 
-  for (const auto& queueFamily : queueFamilies) {
-    if (queueFamily.queueCount > 0 && (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
-      return true;
+  for (auto i = 0ul; i < queueFamilies.size(); i++) {
+    if (queueFamilies[i].queueCount > 0 && (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
+      return i;
     }
   }
 
-  return false;
+  return -1;
+}
+
+
+bool PhysicalDevices::isDeviceSuitable(const VkPhysicalDevice& device) {
+  return getQueueFamilyIndex(device) >= 0;
 }

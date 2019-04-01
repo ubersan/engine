@@ -37,10 +37,17 @@ void ValidationLayers::setupDebugMessenger(const VkInstance& instance) {
   }
 }
 
-void ValidationLayers::addLayers(VkInstanceCreateInfo& instance_create_info) {
+void ValidationLayers::addLayers(VkInstanceCreateInfo& createInfo) {
   if (VALIDATION_LAYERS_ARE_ENABLED) {
-    instance_create_info.enabledLayerCount = static_cast<uint32_t>(layerNames.size());
-    instance_create_info.ppEnabledLayerNames = layerNames.data();
+    createInfo.enabledLayerCount = static_cast<uint32_t>(layerNames.size());
+    createInfo.ppEnabledLayerNames = layerNames.data();
+  }
+}
+
+void ValidationLayers::addLayers(VkDeviceCreateInfo& createInfo) {
+  if (VALIDATION_LAYERS_ARE_ENABLED) {
+    createInfo.enabledLayerCount = static_cast<uint32_t>(layerNames.size());
+    createInfo.ppEnabledLayerNames = layerNames.data();
   }
 }
 

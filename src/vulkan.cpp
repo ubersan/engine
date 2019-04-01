@@ -21,16 +21,15 @@ void Vulkan::createInstance(const vector<const char*>& glfwRequiredExtensions) {
   vector<const char*> extensions{glfwRequiredExtensions};
   validationLayers.addExtensions(extensions);
 
-  VkInstanceCreateInfo instance_create_info = {
+  VkInstanceCreateInfo instanceCreateInfo = {
     .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
     .pApplicationInfo = &application_info,
     .enabledExtensionCount = static_cast<uint32_t>(extensions.size()),
     .ppEnabledExtensionNames = extensions.data(),
   };
+  validationLayers.addLayers(instanceCreateInfo);
 
-  validationLayers.addLayers(instance_create_info);
-
-  if (vkCreateInstance(&instance_create_info, nullptr, &instance) != VK_SUCCESS) {
+  if (vkCreateInstance(&instanceCreateInfo, nullptr, &instance) != VK_SUCCESS) {
     throw runtime_error("Could not create instance.");
   }
 
@@ -39,4 +38,30 @@ void Vulkan::createInstance(const vector<const char*>& glfwRequiredExtensions) {
 
 void Vulkan::pickPhysicalDevice() {
   physicalDevice = physicalDevices.findMostSuitableDevice(instance);
+}
+
+void Vulkan::createLogicalDevice() {
+  float queuePriority = 1.0f;
+  auto queueFamilyIndex = physicalDevices.getQueueFamilyIndex(physicalDevice);
+  VkDeviceQueueCreateInfo queueCreateInfo{
+    .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+    .queueFamilyIndex = queueFamilyIndex,
+    .queueCount = 1,
+    .pQueuePriorities = &queuePriority
+  };
+
+  VkPhysicalDeviceFeatures deviceFeatures{};
+  VkDeviceCreateInfo deviceCreateInfo{
+    .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+    .queueCreateInfoCount = 1,
+    .pQueueCreateInfos = &queueCreateInfo,
+    .pEnabledFeatures = &deviceFeatures
+  };
+  validationLayers.addLayers(deviceCreateInfo);
+
+  if (vkCreateDevice(physicalDevice, &deviceCreateInfo, nullptr, &device) != VK_SUCCESS) {
+    throw runtime_error("Failed to create logical device");
+  }
+
+  vkGetDeviceQueue(device, queueFamilyIndex, 0, &graphicsQueue);
 }

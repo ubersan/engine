@@ -18,7 +18,8 @@ public:
   void setupDebugMessenger(const VkInstance& instance);
   void cleanUp(const VkInstance& instance);
 
-  void addLayers(VkInstanceCreateInfo& instance_create_info);
+  void addLayers(VkInstanceCreateInfo& createInfo);
+  void addLayers(VkDeviceCreateInfo& createInfo);
   void addExtensions(vector<const char*>& extensions);
 
 private:
